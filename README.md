@@ -1,25 +1,22 @@
-# Simple Video Editor — Trim, Combine & Down‑size
+# Simple Video Editor — Trim, Combine & Down‑size
 
 ![app screenshot.png](data/screenshot.png)
 
-Tiny PyQt app that lets you:
+PyQt GUI that lets you trim clips, reorder them, and export in three ways:
 
-| Action | Backend | Notes |
-|--------|---------|-------|
-| **Lossless trim + concat** | FFmpeg `-c copy` | Instant, zero re‑encode. |
-| **Down‑size via FFmpeg** | `scale_cuda / scale_npp / scale` → NVENC | GPU‑fast on NVIDIA, CPU fallback otherwise. |
-| **Flexible re‑encode** | MoviePy | Any codec/res, but slower. |
+| Button                    | What it does | Speed |
+|---------------------------|--------------|-------|
+| **Export Lossless…**      | FFmpeg `-c copy` – instant packet copy (no re‑encode). | ⚡ |
+| **Export FFmpeg Resize…** | Software `scale` ➜ down‑size ➜ `libx264` encode. | ~1 × realtime on modern CPU |
+| **Export Re‑encode…**     | MoviePy pipeline – flexible filters, slowest. | 🐢 |
 
 ---
 
 ## ✨ Features
-* Add multiple clips, set **start / end** per clip.
-* **Drag to reorder** or remove segments.
-* Choose a **resolution preset** (Original / 1080p / 720p / 480p / 360p / 240p) before export.
-* Three export buttons  
-  * **Export Lossless…** – packet copy.  
-  * **Export FFmpeg Resize…** – down‑size on GPU/CPU then concat.  
-  * **Export Re‑encode…** – MoviePy pipeline (fallback if you need filters).
+* Numeric **start/end** trim per clip (hh:mm:ss or seconds).
+* **Drag to reorder** or delete clips.
+* **Resolution presets** – Original, 1080 p, 720 p, 480 p, 360 p, 240 p (applies to resize/re‑encode paths).
+* Works on **pure‑CPU FFmpeg**; GPU builds auto‑detected but *not required*.
 
 ---
 
@@ -28,7 +25,7 @@ Tiny PyQt app that lets you:
 ```bash
 git clone https://github.com/<your‑handle>/simple-video-editor.git
 cd simple-video-editor
-python -m venv .venv && .venv/Scripts/activate      # Win
+python -m venv .venv && . .venv/Scripts/activate    # Windows; use source for mac/linux
 pip install -r requirements.txt
 
 # run
